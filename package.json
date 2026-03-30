@@ -24,6 +24,9 @@
     "@mariozechner/pi-coding-agent": "*",
     "@sinclair/typebox": "*"
   },
+  "dependencies": {
+    "@dip-in-milk/snake": "^1.0.0-1"
+  },
   "publishConfig": {
     "access": "public"
   },
