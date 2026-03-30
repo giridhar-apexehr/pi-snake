@@ -35,6 +35,7 @@ class SnakeAdapter {
 	private fruits: Array<InstanceType<SnakeLib["Fruit"]>> = [];
 	private score = 0;
 	private gameOver = false;
+	private initializedDirection = false;
 
 	constructor(private readonly worldWidth: number, private readonly worldHeight: number) {
 		this.game = new lib.Game(worldWidth, worldHeight);
@@ -45,6 +46,8 @@ class SnakeAdapter {
 				acc[control.label] = control.method;
 				return acc;
 			}, { up: () => undefined, down: () => undefined, left: () => undefined, right: () => undefined });
+		this.controls.right();
+		this.initializedDirection = true;
 		this.spawnFruit();
 	}
 
@@ -69,6 +72,10 @@ class SnakeAdapter {
 			return;
 		}
 		const [dx, dy] = this.player.gameObject.direction;
+		if (!this.initializedDirection || (dx === 0 && dy === 0)) {
+			return;
+		}
+
 		const nextHead = { x: head.x + dx, y: head.y + dy };
 
 		if (nextHead.x < 0 || nextHead.x >= this.worldWidth || nextHead.y < 0 || nextHead.y >= this.worldHeight) {
@@ -76,7 +83,7 @@ class SnakeAdapter {
 			return;
 		}
 
-		if (snake.some((segment) => segment.x === nextHead.x && segment.y === nextHead.y)) {
+		if (snake.slice(1).some((segment) => segment.x === nextHead.x && segment.y === nextHead.y)) {
 			this.gameOver = true;
 			return;
 		}
