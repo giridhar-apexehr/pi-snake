@@ -20,25 +20,31 @@
       "./extensions"
     ]
   },
+  "dependencies": {
+    "@dip-in-milk/snake": "^1.0.0-1"
+  },
   "peerDependencies": {
     "@mariozechner/pi-coding-agent": "*",
     "@sinclair/typebox": "*"
-  },
-  "dependencies": {
-    "@dip-in-milk/snake": "^1.0.0-1"
   },
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
-    "lint:commits": "commitlint --from=HEAD~1 --to=HEAD",
-    "release": "semantic-release"
+    "typecheck": "tsc --noEmit",
+    "lint:commits": "commitlint --last",
+    "release": "semantic-release",
+    "release:dry-run": "semantic-release --dry-run"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.0",
     "@commitlint/config-conventional": "^19.8.0",
     "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/commit-analyzer": "^13.0.1",
     "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^11.0.6",
+    "@semantic-release/npm": "^12.0.2",
+    "@semantic-release/release-notes-generator": "^14.0.3",
     "semantic-release": "^24.2.3",
     "typescript": "^5.9.3"
   }
