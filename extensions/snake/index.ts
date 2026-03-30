@@ -1,5 +1,5 @@
 import type { ExtensionAPI, Theme } from "@mariozechner/pi-coding-agent";
-import { matchesKey, visibleWidth } from "@mariozechner/pi-tui";
+import { matchesKey, truncateToWidth, visibleWidth } from "@mariozechner/pi-tui";
 import SnakeEngine from "@dip-in-milk/snake";
 
 type Direction = "up" | "down" | "left" | "right";
@@ -198,6 +198,7 @@ class SnakeOverlayComponent {
 	}
 
 	render(width: number): string[] {
+		const clampLine = (line: string) => truncateToWidth(line, width, "");
 		const dim = (s: string) => this.theme.fg("dim", s);
 		const accent = (s: string) => this.theme.fg("accent", s);
 		const success = (s: string) => this.theme.fg("success", s);
@@ -219,10 +220,10 @@ class SnakeOverlayComponent {
 			return text + " ".repeat(Math.max(0, totalW - len));
 		};
 
-		lines.push(dim(top));
-		lines.push(dim("│") + fit(`${accent("Snake")}`) + dim("│"));
-		lines.push(dim("│") + fit(`Score ${success(String(this.score))}  High ${success(String(this.highScore))}`) + dim("│"));
-		lines.push(dim(`├${"─".repeat(totalW)}┤`));
+		lines.push(clampLine(dim(top)));
+		lines.push(clampLine(dim("│") + fit(`${accent("Snake")}`) + dim("│")));
+		lines.push(clampLine(dim("│") + fit(`Score ${success(String(this.score))}  High ${success(String(this.highScore))}`) + dim("│")));
+		lines.push(clampLine(dim(`├${"─".repeat(totalW)}┤`)));
 
 		for (let y = 0; y < maxGridHeight; y++) {
 			let row = "";
@@ -238,17 +239,17 @@ class SnakeOverlayComponent {
 				else if (isFruit) row += error("◆ ");
 				else row += "  ";
 			}
-			lines.push(dim("│") + row + dim("│"));
+			lines.push(clampLine(dim("│") + row + dim("│")));
 		}
 
-		lines.push(dim(`├${"─".repeat(totalW)}┤`));
+		lines.push(clampLine(dim(`├${"─".repeat(totalW)}┤`)));
 		const footer = this.adapter.isGameOver()
 			? `${error("Game over")}: Enter/Space restart • Esc/Q close`
 			: this.paused
 				? `${accent("Paused")}: P resume • Esc/Q close`
 				: "Move: ↑↓←→ / WASD / IJKL • P pause • Esc/Q close";
-		lines.push(dim("│") + fit(footer) + dim("│"));
-		lines.push(dim(bottom));
+		lines.push(clampLine(dim("│") + fit(footer) + dim("│")));
+		lines.push(clampLine(dim(bottom)));
 
 		return lines;
 	}
