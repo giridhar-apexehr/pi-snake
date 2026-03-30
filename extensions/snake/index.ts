@@ -207,23 +207,22 @@ class SnakeOverlayComponent {
 		const cellW = 2;
 		const maxGridWidth = Math.max(10, Math.min(BASE_WIDTH, Math.floor((width - 8) / cellW)));
 		const maxGridHeight = Math.max(8, Math.min(BASE_HEIGHT, Math.floor((maxGridWidth / BASE_WIDTH) * BASE_HEIGHT)));
-		const gridW = maxGridWidth * cellW;
-		const totalW = gridW + 2;
-		const top = `╭${"─".repeat(totalW)}╮`;
-		const bottom = `╰${"─".repeat(totalW)}╯`;
+		const innerW = maxGridWidth * cellW;
+		const top = `╭${"─".repeat(innerW)}╮`;
+		const bottom = `╰${"─".repeat(innerW)}╯`;
 		const snake = this.adapter.getSnake();
 		const fruit = this.adapter.getFruit();
 		const lines: string[] = [];
 
 		const fit = (text: string) => {
 			const len = visibleWidth(text);
-			return text + " ".repeat(Math.max(0, totalW - len));
+			return text + " ".repeat(Math.max(0, innerW - len));
 		};
 
 		lines.push(clampLine(dim(top)));
 		lines.push(clampLine(dim("│") + fit(`${accent("Snake")}`) + dim("│")));
 		lines.push(clampLine(dim("│") + fit(`Score ${success(String(this.score))}  High ${success(String(this.highScore))}`) + dim("│")));
-		lines.push(clampLine(dim(`├${"─".repeat(totalW)}┤`)));
+		lines.push(clampLine(dim(`├${"─".repeat(innerW)}┤`)));
 
 		for (let y = 0; y < maxGridHeight; y++) {
 			let row = "";
@@ -242,7 +241,7 @@ class SnakeOverlayComponent {
 			lines.push(clampLine(dim("│") + row + dim("│")));
 		}
 
-		lines.push(clampLine(dim(`├${"─".repeat(totalW)}┤`)));
+		lines.push(clampLine(dim(`├${"─".repeat(innerW)}┤`)));
 		const footer = this.adapter.isGameOver()
 			? `${error("Game over")}: Enter/Space restart • Esc/Q close`
 			: this.paused
